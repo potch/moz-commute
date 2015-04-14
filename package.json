@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node index.js > test.html",
-    "watch": "onchange 'index.js' 'template.hb' -- npm run build"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
