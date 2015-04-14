@@ -73,6 +73,7 @@
         font-family: 'Raleway';
         text-transform: uppercase;
         letter-spacing: .2em;
+        text-indent: .1em;
         text-align: center;
         font-size: 2em;
         margin: .5em;
@@ -87,8 +88,9 @@
         background-image:
           linear-gradient(90deg, #222 5%, transparent 5%, transparent 95%, #222 95%),
           linear-gradient(#222 10%, transparent 10%, transparent 50%, rgba(100,100,100,.2) 50%, rgba(100,100,100,.2) 90%, #222 90%);
-        background-size: calc(1ch + 4px) 50px;
+        background-size: calc(1ch + 4px) 1.5em;
         background-position: left -.1em;
+        background-repeat: repeat-x;
       }
       .dest {
         width: calc(16ch + 64px);
