@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <link href='http://fonts.googleapis.com/css?family=Fira+Mono|Raleway:500' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Fira+Mono|Raleway:500' rel='stylesheet' type='text/css'>
     <style>
       table {
         width: 100%;
