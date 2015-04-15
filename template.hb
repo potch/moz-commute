@@ -108,8 +108,8 @@
       .warning {
         height: .8em;
         position: absolute;
-        top: .24em;
-        right: -1.2em;
+        top: .25em;
+        left: -1.2em;
       }
     </style>
   </head>
