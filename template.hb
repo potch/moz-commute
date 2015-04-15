@@ -38,7 +38,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: -webkit-translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
         content:attr(data-num);
         color: #fff;
