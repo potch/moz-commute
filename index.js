@@ -26,7 +26,11 @@ function avow(fn, pick) {
   };
 }
 
-var TOKEN = '14e73b26-e7d9-4064-9c60-2e0af41de20b';
+var TOKEN = process.env.API_TOKEN;
+
+if (!TOKEN) {
+  console.error('No API token found! Check environment variable `API_TOKEN`.');
+}
 
 function paths(o, d, cb) {
   console.error('connecting');
@@ -63,7 +67,7 @@ var roadURLs = {
 
 function condense(destination) {
   return function (paths) {
-    console.error('processing');
+    console.error('processing %d paths', paths.length);
     paths = paths.map(function (p, i) {
       var o = {
         destination: destination
@@ -91,6 +95,7 @@ function condense(destination) {
       }).filter(function (s) {
         return !!s;
       });
+      o.warning = p.incidents[0].incident && (p.incidents[0].incident.length > 0);
       o.travelTime = p.currentTravelTime[0];
       o.avgTravelTime = p.typicalTravelTime[0];
       return o;

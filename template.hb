@@ -100,9 +100,15 @@
         margin: 0 4vw;
       }
       .time {
-        text-indent: -5px;
         width: calc(10ch + 40px);
         text-align: right;
+        position: relative;
+      }
+      .warning {
+        height: .8em;
+        position: absolute;
+        top: .24em;
+        right: -1.2em;
       }
     </style>
   </head>
@@ -125,8 +131,13 @@
             </div>
             {{/each}}
           </div>
-          <div class="time">{{travelTime}} mins</div>
-        </tr>
+          <div class="time">
+            {{#if warning}}
+            <img src="warning.svg" class="warning">
+            {{/if}}
+            {{travelTime}} mins
+          </div>
+        </li>
         {{/each}}
     </ul>
   </body>

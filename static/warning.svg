@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1255px" height="1107px" viewBox="0 0 1255 1107" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <defs>
+        <polygon id="path-1" points="627.5 76 1178.72517 1030.75 76.2748305 1030.75 "></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Triangle-1">
+            <use stroke="none" fill="#FFCC00" fill-rule="evenodd" sketch:type="MSShapeGroup" xlink:href="#path-1"></use>
+            <use stroke="#FFCC00" stroke-width="76" stroke-linecap="round" stroke-linejoin="round" fill="none" xlink:href="#path-1"></use>
+        </g>
+        <path d="M594.393799,763.854492 L576.582275,334.054688 L672.609619,334.054688 L654.410889,763.854492 L594.393799,763.854492 Z M627.693604,953.19873 C612.463384,953.19873 599.363011,947.713352 588.39209,936.742432 C577.421169,925.771511 571.935791,912.671137 571.935791,897.440918 C571.935791,882.210699 577.421169,869.174859 588.39209,858.333008 C599.363011,847.491157 612.463384,842.070312 627.693604,842.070312 C642.665684,842.070312 655.636989,847.426623 666.60791,858.139404 C677.578831,868.852186 683.064209,881.952559 683.064209,897.440918 C683.064209,912.929277 677.514297,926.094184 666.414307,936.936035 C655.314316,947.777886 642.407544,953.19873 627.693604,953.19873 L627.693604,953.19873 Z" id="!" fill="#000000" sketch:type="MSShapeGroup"></path>
+    </g>
+</svg>
