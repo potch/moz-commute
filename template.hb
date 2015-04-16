@@ -111,13 +111,14 @@
         top: .25em;
         left: -1.2em;
       }
+
     </style>
   </head>
   <body>
       <header>
         <h1>Mountain View Transit</h1>
       </header>
-      <ul>
+      <ul class="list">
         {{#each paths}}
         <li>
           <div class="dest">
@@ -141,5 +142,19 @@
         </li>
         {{/each}}
     </ul>
+    <script>
+      function update() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function () {
+          var html = xhr.responseText;
+          console.log('updated');
+          document.querySelector('.list').innerHTML = html;
+        };
+        xhr.open('GET', '/update');
+        xhr.send();
+      }
+      setInterval(update, 30*1000);
+    </script>
   </body>
 </html>

@@ -5,6 +5,7 @@ var _ = require('lodash');
 var handlebars = require('handlebars');
 var fs = require('fs');
 var template = handlebars.compile(fs.readFileSync(__dirname + '/template.hb').toString());
+var templateAjax = handlebars.compile(fs.readFileSync(__dirname + '/template-ajax.hb').toString());
 var express = require('express');
 var http = require('http');
 
@@ -105,20 +106,25 @@ function condense(destination) {
 }
 
 var doc;
+var part;
 
 function update() {
   Promise.all([
     paths(35,42).then(condense('San Francisco')),
     paths(35, 460).then(condense('San Jose')),
     paths(35, 637).then(condense('Los Gatos')),
-    paths(35, 1285).then(condense('Fremont'))
-    ]).then(function (paths) {
-      paths = _.flatten(paths);
-      console.error('writing');
-      doc = template({paths: paths});
-    }).catch(console.error.bind(console));
+    paths(35, 800).then(condense('Hayward'))
+  ]).then(function (paths) {
+    paths = _.flatten(paths);
+    console.error('writing');
+    doc = template({paths: paths});
+    part = templateAjax({paths: paths});
+    setTimeout(update, 60 * 1000);
+  }).catch(function (e) {
+    console.error(err);
+    setTimeout(update, 60 * 1000);
+  });
 }
-setInterval(update, 5 * 60 * 1000);
 update();
 
 
@@ -129,6 +135,11 @@ var server = http.createServer(app);
 
 app.get('/', function(req, res) {
   res.end(doc);
+});
+
+app.get('/update', function(req, res) {
+  res.type('html');
+  res.end(part);
 });
 
 server.listen(app.get('port'), function() {
