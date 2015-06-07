@@ -8,6 +8,7 @@ var template = handlebars.compile(fs.readFileSync(__dirname + '/template.hb').to
 var templateAjax = handlebars.compile(fs.readFileSync(__dirname + '/template-ajax.hb').toString());
 var express = require('express');
 var http = require('http');
+var Transit = require('./transit');
 
 function avow(fn, pick) {
   pick = pick || 0;
@@ -27,38 +28,24 @@ function avow(fn, pick) {
   };
 }
 
-var TOKEN = process.env.API_TOKEN;
+var TRAFFIC_TOKEN = process.env.TRAFFIC_API_TOKEN;
+var TRANSIT_TOKEN = process.env.TRANSIT_API_TOKEN;
 
-if (!TOKEN) {
+if (!TRAFFIC_TOKEN || !TRANSIT_TOKEN) {
   console.error('No API token found! Check environment variable `API_TOKEN`.');
 }
 
-function paths(o, d, cb) {
+var five = new Transit(process.env.TRANSIT_API_TOKEN);
+
+function paths(o, d) {
   console.error('connecting');
   return request(
-    'http://services.my511.org/traffic/getpathlist.aspx?token=' + TOKEN + '&o=' + o + '&d=' + d
+    'http://services.my511.org/traffic/getpathlist.aspx?token=' + TRAFFIC_TOKEN + '&o=' + o + '&d=' + d
   )
   .then(parseString)
   .then(_.partialRight(_.result, 'paths'))
   .then(_.partialRight(_.result, 'path'));
 }
-
-
-//
-// request('http://services.my511.org/traffic/getoriginlist.aspx?token=14e73b26-e7d9-4064-9c60-2e0af41de20b')
-//   .then(parseString)
-//   .then(function (result) {
-//     result.origins.origin.forEach(function(o) {
-//       console.error('[' + o.node + '] ' + o.city + ' - ' + o.mainRoad + ' AT ' + o.crossRoad);
-//     });
-//   });
-
-/*
-, function (err, paths) {
-console.dir(paths);
-console.dir(paths[0].segments[0].segment);
-}
-*/
 
 var roadURLs = {
   'CA': 'cahwy.svg',
@@ -105,28 +92,107 @@ function condense(destination) {
   };
 }
 
+function rank(results) {
+  return function (paths) {
+    paths.sort(function (a, b) {
+      return a.currentTravelTime > b.currentTravelTime ? 1 : -1;
+    });
+    return paths.slice(0,results);
+  };
+}
+
+function filter(road) {
+  return function (paths) {
+    paths = paths.filter(function (p) {
+      var has = false;
+      p.segments[0].segment.forEach(function (s) {
+        if (s.road[0].indexOf(road) > -1) {
+          has = true;
+        }
+      });
+      return has;
+    });
+    return paths;
+  };
+}
+
+function filterout(road) {
+  return function (paths) {
+    paths = paths.filter(function (p) {
+      var has = true;
+      p.segments[0].segment.forEach(function (s) {
+        if (s.road[0].indexOf(road) > -1) {
+          has = false;
+        }
+      });
+      return has;
+    });
+    return paths;
+  };
+}
+
 var doc;
 var part;
 
 function update() {
   Promise.all([
-    paths(35,42).then(condense('San Francisco')),
-    paths(35, 460).then(condense('San Jose')),
-    paths(35, 637).then(condense('Los Gatos')),
-    paths(35, 800).then(condense('Hayward'))
-  ]).then(function (paths) {
-    paths = _.flatten(paths);
-    console.error('writing');
-    doc = template({paths: paths});
-    part = templateAjax({paths: paths});
-    setTimeout(update, 60 * 1000);
+    updateTraffic(),
+    updateTransit()
+  ]).then(function (results) {
+    var paths = _.flatten(results[0]);
+    var trains = results[1];
+    doc = template({paths: paths, trains: trains});
+    part = templateAjax({paths: paths, trains: trains});
+    setTimeout(update, 30 * 1000);
   }).catch(function (e) {
-    console.error(err);
-    setTimeout(update, 60 * 1000);
+    console.error(e);
+    setTimeout(update, 30 * 1000);
   });
 }
-update();
 
+function updateTransit() {
+  return Promise.all([
+    five.getTimes(70211),
+    five.getTimes(70212)
+  ]).then(function (o) {
+    return _.flatten(o).map(function (t) {
+      t.service = t.service.toLowerCase();
+      if (t.service === 'baby bullet') {
+        t.service = 'Express';
+      }
+      t.direction = t.direction.split(/\s+/)[0].toLowerCase();
+      return t;
+    });
+  });
+}
+
+function updateTraffic() {
+  return Promise.all([
+    paths(35, 1177)
+      .then(filter('US-101'))
+      .then(filterout('I-280'))
+      .then(rank(1))
+      .then(condense('Mozilla SF')),
+    paths(35, 1177)
+      .then(filter('I-280'))
+      .then(rank(1))
+      .then(condense('Mozilla SF')),
+    paths(35, 314)
+      .then(filter('CA-85'))
+      .then(condense('SFO Airport')),
+    paths(35, 79)
+      .then(rank(1))
+      .then(filter('US-101'))
+      .then(condense('SJC Airport')),
+    paths(35, 637)
+      .then(rank(1))
+      .then(condense('Los Gatos')),
+    paths(35, 800)
+      .then(rank(1))
+      .then(condense('Hayward'))
+  ]);
+}
+update();
 
 var app = express();
 app.set('port', (process.env.PORT || 8000));

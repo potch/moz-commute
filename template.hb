@@ -4,20 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link href='//fonts.googleapis.com/css?family=Fira+Mono|Raleway:500' rel='stylesheet' type='text/css'>
+    <title>Mountain View Transit | Driving Times</title>
     <style>
-      table {
-        width: 100%;
+      html, body {
+        height: 100%;
       }
       body {
         background: #222;
         color: #fff;
         font-size: 4vmin;
+        display: flex;
+        flex-direction: column;
         font-family: 'Raleway', sans-serif;
       }
-      .route i {
+      i {
         display: inline-block;
         vertical-align: middle;
-        font-size: .5em;
+        font-size: .65em;
         margin-right: 1em;
         letter-spacing: .1em;
         font-style: normal;
@@ -64,7 +67,8 @@
       li {
         text-align: center;
         background: #222;
-        margin-top: .2em;
+        display: flex;
+        margin: .1em 3em;
       }
       li > div {
         text-align: left;
@@ -80,7 +84,7 @@
         margin: .5em;
         font-weight: 500;
       }
-      .dest, .time {
+      .disp {
         line-height: 1.4em;
         font-family: 'Fira Mono';
         text-indent: 2px;
@@ -92,18 +96,22 @@
         background-size: calc(1ch + 4px) 1.5em;
         background-position: left -.1em;
         background-repeat: repeat-x;
+        text-transform: capitalize;
       }
       .dest {
-        width: calc(16ch + 64px);
+        width: calc(20ch + 80px);
       }
       .route {
-        width: 25vw;
-        margin: 0 4vw;
+        width: 12em;
+      }
+      .flex {
+        flex: 1;
       }
       .time {
         width: calc(10ch + 40px);
         text-align: right;
         position: relative;
+        text-transform: lowercase;
       }
       .warning {
         height: .8em;
@@ -111,7 +119,13 @@
         top: .25em;
         left: -1.2em;
       }
-
+      .depart {
+        width: 12em;
+        text-transform: uppercase;
+      }
+      .driving + .train {
+        margin-top: 2em;
+      }
     </style>
   </head>
   <body>
@@ -120,10 +134,11 @@
       </header>
       <ul class="list">
         {{#each paths}}
-        <li>
-          <div class="dest">
+        <li class="driving">
+          <div class="dest disp">
             {{destination}}
           </div>
+          <span class="flex"></span>
           <div class="route">
             <i>via</i>
             {{#each roads}}
@@ -133,11 +148,28 @@
             </div>
             {{/each}}
           </div>
-          <div class="time">
+          <span class="flex"></span>
+          <div class="time disp">
             {{#if warning}}
             <img src="warning.svg" class="warning">
             {{/if}}
             {{travelTime}} mins
+          </div>
+        </li>
+        {{/each}}
+
+        {{#each trains}}
+        <li class="train">
+          <div class="dest disp">
+            {{direction}} {{service}}
+          </div>
+          <span class="flex"></span>
+          <div class="depart">
+            <i>departing in</i>
+          </div>
+          <span class="flex"></span>
+          <div class="time disp">
+            {{time}} mins
           </div>
         </li>
         {{/each}}
@@ -146,6 +178,7 @@
       function update() {
         var xhr = new XMLHttpRequest();
 
+        console.log('fetching');
         xhr.onload = function () {
           var html = xhr.responseText;
           console.log('updated');
@@ -154,7 +187,7 @@
         xhr.open('GET', '/update');
         xhr.send();
       }
-      setInterval(update, 30*1000);
+      setInterval(update, 10*1000);
     </script>
   </body>
 </html>

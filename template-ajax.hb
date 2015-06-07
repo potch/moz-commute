@@ -1,8 +1,9 @@
 {{#each paths}}
-<li>
-  <div class="dest">
+<li class="driving">
+  <div class="dest disp">
     {{destination}}
   </div>
+  <span class="flex"></span>
   <div class="route">
     <i>via</i>
     {{#each roads}}
@@ -12,11 +13,28 @@
     </div>
     {{/each}}
   </div>
-  <div class="time">
+  <span class="flex"></span>
+  <div class="time disp">
     {{#if warning}}
     <img src="warning.svg" class="warning">
     {{/if}}
     {{travelTime}} mins
+  </div>
+</li>
+{{/each}}
+
+{{#each trains}}
+<li class="train">
+  <div class="dest disp">
+    {{direction}} {{service}}
+  </div>
+  <span class="flex"></span>
+  <div class="depart">
+    <i>departing in</i>
+  </div>
+  <span class="flex"></span>
+  <div class="time disp">
+    {{time}} mins
   </div>
 </li>
 {{/each}}
