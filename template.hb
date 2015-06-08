@@ -6,14 +6,19 @@
     <link href='//fonts.googleapis.com/css?family=Fira+Mono|Raleway:500' rel='stylesheet' type='text/css'>
     <title>Mountain View Transit | Driving Times</title>
     <style>
+      * {
+        box-sizing: border-box;
+      }
       html, body {
         height: 100%;
       }
       body {
         background: #222;
+        padding: .5em;
         color: #fff;
         font-size: 4vmin;
         display: flex;
+        margin: 0;
         flex-direction: column;
         font-family: 'Raleway', sans-serif;
       }
@@ -62,13 +67,13 @@
       }
       ul {
         list-style-type: none;
-        padding: 0 1em;
+        padding: 0 3em;
       }
       li {
         text-align: center;
         background: #222;
         display: flex;
-        margin: .1em 3em;
+        margin: .1em 0;
       }
       li > div {
         text-align: left;

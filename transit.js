@@ -71,7 +71,7 @@ Transit.prototype.getTimes = function (stop) {
     .then(function (o) {
       return o.find('DepartureTime').map(function (r) {
         var out = {};
-        out.time = r.value;
+        out.time = parseInt(r.value, 10);
         out.stop = r.parents('Stop')[0].attrs.name;
         out.code = stop;
         out.direction = r.parents('RouteDirection')[0].attrs.Name;

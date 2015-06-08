@@ -92,12 +92,12 @@ function condense(destination) {
   };
 }
 
-function rank(results) {
+function top(results, prop) {
   return function (paths) {
     paths.sort(function (a, b) {
-      return a.currentTravelTime > b.currentTravelTime ? 1 : -1;
+      return a[prop] > b[prop] ? 1 : -1;
     });
-    return paths.slice(0,results);
+    return paths.slice(0, results);
   };
 }
 
@@ -141,6 +141,9 @@ function update() {
   ]).then(function (results) {
     var paths = _.flatten(results[0]);
     var trains = results[1];
+    trains.sort(function (a, b) {
+      return (a.time > b.time) ? 1 : -1;
+    });
     doc = template({paths: paths, trains: trains});
     part = templateAjax({paths: paths, trains: trains});
     setTimeout(update, 30 * 1000);
@@ -152,8 +155,8 @@ function update() {
 
 function updateTransit() {
   return Promise.all([
-    five.getTimes(70211),
-    five.getTimes(70212)
+    five.getTimes(70211).then(top(2, 'time')),
+    five.getTimes(70212).then(top(2, 'time'))
   ]).then(function (o) {
     return _.flatten(o).map(function (t) {
       t.service = t.service.toLowerCase();
@@ -171,24 +174,25 @@ function updateTraffic() {
     paths(35, 1177)
       .then(filter('US-101'))
       .then(filterout('I-280'))
-      .then(rank(1))
+      .then(top(1, 'currentTravelTime'))
       .then(condense('Mozilla SF')),
     paths(35, 1177)
       .then(filter('I-280'))
-      .then(rank(1))
+      .then(top(1, 'currentTravelTime'))
       .then(condense('Mozilla SF')),
     paths(35, 314)
       .then(filter('CA-85'))
+      .then(top(1, 'currentTravelTime'))
       .then(condense('SFO Airport')),
     paths(35, 79)
-      .then(rank(1))
+      .then(top(1, 'currentTravelTime'))
       .then(filter('US-101'))
       .then(condense('SJC Airport')),
     paths(35, 637)
-      .then(rank(1))
+      .then(top(1, 'currentTravelTime'))
       .then(condense('Los Gatos')),
     paths(35, 800)
-      .then(rank(1))
+      .then(top(1, 'currentTravelTime'))
       .then(condense('Hayward'))
   ]);
 }
