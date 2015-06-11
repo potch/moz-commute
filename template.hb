@@ -174,7 +174,11 @@
           </div>
           <span class="flex"></span>
           <div class="time disp">
+            {{#if plural}}
             {{time}} mins
+            {{else}}
+            {{time}} min&nbsp;
+            {{/if}}
           </div>
         </li>
         {{/each}}

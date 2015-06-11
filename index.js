@@ -144,11 +144,19 @@ function update() {
     trains.sort(function (a, b) {
       return (a.time > b.time) ? 1 : -1;
     });
+    trains.forEach(function (t) {
+      if (t.time === 1) {
+        t.plural = false;
+      } else {
+        t.plural = true;
+      }
+    });
     doc = template({paths: paths, trains: trains});
     part = templateAjax({paths: paths, trains: trains});
     setTimeout(update, 30 * 1000);
   }).catch(function (e) {
     console.error(e);
+    console.dir(e);
     setTimeout(update, 30 * 1000);
   });
 }
