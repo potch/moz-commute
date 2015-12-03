@@ -83,6 +83,7 @@ function condense(destination) {
       }).filter(function (s) {
         return !!s;
       });
+      console.log(p.incidents);
       o.warning = p.incidents[0].incident && (p.incidents[0].incident.length > 0);
       o.travelTime = p.currentTravelTime[0];
       o.avgTravelTime = p.typicalTravelTime[0];
@@ -166,7 +167,9 @@ function updateTransit() {
     five.getTimes(70211).then(top(2, 'time')),
     five.getTimes(70212).then(top(2, 'time'))
   ]).then(function (o) {
-    return _.flatten(o).map(function (t) {
+    var arr = _.flatten(o);
+    console.log(arr.length + ' departures found');
+    return arr.map(function (t) {
       t.service = t.service.toLowerCase();
       if (t.service === 'baby bullet') {
         t.service = 'Express';

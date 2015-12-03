@@ -31,6 +31,18 @@
         font-style: normal;
         text-transform: uppercase;
       }
+      h2 {
+        font-size: .75em;
+        letter-spacing: .1em;
+        margin-left: .25em;
+        font-weight: normal;
+        text-transform: uppercase;
+        margin-top: 0;
+        margin-bottom: .25em;
+      }
+      .driving + h2 {
+        margin-top: 2em;
+      }
       .road {
         position: relative;
         display: inline-block;
@@ -68,6 +80,7 @@
       ul {
         list-style-type: none;
         padding: 0 3em;
+        margin: 0;
       }
       li {
         text-align: center;
@@ -128,9 +141,6 @@
         width: 12em;
         text-transform: uppercase;
       }
-      .driving + .train {
-        margin-top: 2em;
-      }
     </style>
   </head>
   <body>
@@ -138,6 +148,7 @@
         <h1>Mountain View Transit</h1>
       </header>
       <ul class="list">
+        <h2>Drive Times</h2>
         {{#each paths}}
         <li class="driving">
           <div class="dest disp">
@@ -163,6 +174,7 @@
         </li>
         {{/each}}
 
+        <h2>Caltrain</h2>
         {{#each trains}}
         <li class="train">
           <div class="dest disp">

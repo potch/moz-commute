@@ -1,3 +1,4 @@
+<h2>Drive Times</h2>
 {{#each paths}}
 <li class="driving">
   <div class="dest disp">
@@ -23,6 +24,7 @@
 </li>
 {{/each}}
 
+<h2>Caltrain</h2>
 {{#each trains}}
 <li class="train">
   <div class="dest disp">
