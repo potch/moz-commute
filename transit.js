@@ -11,17 +11,24 @@ var BASE_URL = 'http://services.my511.org/Transit2.0/';
 Transit.prototype._req = function (method, params) {
   var self = this;
   return new Promise(function (resolve, reject) {
+    var url = BASE_URL + method + '.aspx';
     request(
       {
-        url: BASE_URL + method + '.aspx',
+        url: url,
         qs: _.assign({}, {token: self.API_KEY}, params)
       },
       function (error, response, body) {
         if (error) {
+          console.error('request error at', url);
           reject(error);
           return;
         }
-        xml.parseString(body).then(resolve).catch(reject);
+        xml.parseString(body).then(resolve).catch(function (error) {
+          console.error('parse error');
+          console.error(body);
+          console.error(error);
+          reject(error);
+        });
       }
     );
   });

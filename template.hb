@@ -92,6 +92,11 @@
         text-align: left;
         display: inline-block;
       }
+      li.error {
+        margin-top: 0;
+        font-size: .8em;
+        margin-top: 1em;
+      }
       h1 {
         font-family: 'Raleway';
         text-transform: uppercase;
@@ -193,8 +198,10 @@
             {{/if}}
           </div>
         </li>
+        {{else}}
+        <li class="error">No transit data found.</li>
         {{/each}}
-    </ul>
+      </ul>
     <script>
       function update() {
         var xhr = new XMLHttpRequest();

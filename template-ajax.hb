@@ -43,4 +43,6 @@
     {{/if}}
   </div>
 </li>
+{{else}}
+<li class="error">No transit data found.</li>
 {{/each}}
