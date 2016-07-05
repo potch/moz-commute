@@ -142,6 +142,15 @@ function update() {
   ]).then(function (results) {
     var paths = _.flatten(results[0]);
     var trains = results[1];
+    paths.forEach(function (p) {
+      var time = parseFloat(p.travelTime);
+      var avgTime = parseFloat(p.avgTravelTime);
+      if (time && time > 0) {
+        p.time = time;
+      } else {
+        p.time = avgTime;
+      }
+    });
     trains.sort(function (a, b) {
       return (a.time > b.time) ? 1 : -1;
     });
