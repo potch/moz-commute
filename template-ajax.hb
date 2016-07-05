@@ -19,7 +19,7 @@
     {{#if warning}}
     <img src="warning.svg" class="warning">
     {{/if}}
-    {{travelTime}} mins
+    {{time}} mins
   </div>
 </li>
 {{/each}}
